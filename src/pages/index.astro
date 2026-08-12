@@ -1,0 +1,362 @@
+---
+import '../styles/global.css';
+import TerminalWindow from '../components/TerminalWindow.astro';
+
+const contacts = [
+  { label: 'contact@s-t-m.fr', href: 'mailto:contact@s-t-m.fr', icon: 'mail' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/dorian-stm/', icon: 'linkedin' },
+  { label: 'GitHub', href: 'https://github.com/dodosamtmann', icon: 'github' },
+  { label: 'cybersmartdesign.s-t-m.fr', href: 'https://cybersmartdesign.s-t-m.fr', icon: 'link' },
+];
+
+const experience = [
+  {
+    path: '~/experience/pro-btp',
+    period: '2022 – 2025',
+    title: 'Analyste Cybersécurité',
+    org: 'Pro BTP · Cagnes-sur-Mer',
+    bullets: [
+      '+2 300 tickets traités sur SI critique (secteur assurance/BTP)',
+      'Use cases de détection déployés en production sur IBM QRadar',
+      'Préprod SIEM complète déployée en 6 mois',
+      'Formation de 3 analystes SOC juniors',
+      "Réponse à incidents selon ISO 27035",
+    ],
+    stack: ['QRadar', 'SentinelOne', 'Netskope', 'Cisco IronPort', 'ServiceNow', 'Resilient', 'Rapid7'],
+  },
+  {
+    path: '~/experience/cybersmartdesign',
+    period: 'Nov. 2025 – présent',
+    title: 'Freelance Web',
+    org: 'CyberSmartDesign · Vence',
+    bullets: [
+      'Création de sites web pour TPE/PME',
+      'Stack : Astro · Cloudflare Workers · TypeScript',
+      "Preuve d'autonomie technique et gestion de projet solo",
+    ],
+    stack: ['Astro', 'Cloudflare Workers', 'TypeScript'],
+  },
+];
+
+const skillGroups = [
+  { name: 'SIEM & Détection', slug: 'siem', color: '#58a6ff', items: ['QRadar', 'Wazuh', 'MITRE ATT&CK', 'ISO 27035'] },
+  { name: 'Protection', slug: 'protection', color: '#bc8cff', items: ['SentinelOne', 'Netskope', 'Defender', 'IronPort'] },
+  { name: 'SOAR & Ticketing', slug: 'soar', color: '#7ee787', items: ['ServiceNow', 'IBM Resilient'] },
+  { name: 'Vuln Management', slug: 'vuln', color: '#f0a500', items: ['Rapid7'] },
+  { name: 'Scripting', slug: 'scripting', color: '#58a6ff', items: ['Python', 'PowerShell', 'Bash'] },
+  { name: 'Infrastructure', slug: 'infra', color: '#8b949e', items: ['Docker', 'Cloudflare', 'Microsoft 365'] },
+];
+
+const formation = [
+  { period: '2023 – 2025', degree: 'Master — Manager Infrastructures & Cybersécurité des SI', school: 'CESI' },
+  { period: '2022 – 2023', degree: 'Licence — Administrateur Système et Réseau', school: 'CESI' },
+  { period: '2020 – 2022', degree: 'DUT — Réseaux et Télécommunications', school: '' },
+];
+
+function progressBar(pct: number): string {
+  const filled = Math.round(pct / 10);
+  return '█'.repeat(filled) + '░'.repeat(10 - filled);
+}
+
+const labs = [
+  { status: 'EN PRÉPARATION', color: '#bc8cff', title: 'BTL1 — Blue Team Level 1', subtitle: '', progress: 80 },
+  {
+    status: 'ACTIF',
+    color: '#7ee787',
+    title: 'Wazuh Home-Lab',
+    subtitle: 'SIEM déployé · scénarios de détection actifs',
+    progress: 100,
+  },
+  { status: 'EN COURS', color: '#58a6ff', title: 'TryHackMe — SOC Level 1', subtitle: '', progress: 70 },
+  { status: 'EN COURS', color: '#58a6ff', title: 'LetsDefend — Scénarios SOC', subtitle: '', progress: 60 },
+].map((lab) => ({
+  ...lab,
+  bar: progressBar(lab.progress),
+  dots: '.'.repeat(Math.max(2, 34 - lab.title.length)),
+}));
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Dorian Samtmann — SOC Analyst · Blue Team</title>
+    <meta
+      name="description"
+      content="Dorian Samtmann, analyste SOC Blue Team spécialisé IBM QRadar : détection et réponse à incidents sur SI critique."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="font-body bg-bg text-text antialiased">
+    <!-- Fixed top navigation -->
+    <header class="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-6 py-5 backdrop-blur-sm md:px-8">
+      <div>
+        <p class="font-display text-sm font-semibold text-text">Dorian Samtmann</p>
+        <p class="font-mono text-xs text-muted">SOC Analyst</p>
+      </div>
+
+      <nav class="absolute left-1/2 hidden -translate-x-1/2 md:block" aria-label="Navigation principale">
+        <div class="flex items-center gap-1 rounded-full border border-border bg-surface px-2 py-1.5 shadow-sm">
+          <a
+            href="#experience"
+            class="rounded-full px-4 py-1.5 font-mono text-sm text-muted transition-all hover:bg-elevated hover:text-text"
+          >
+            Experience
+          </a>
+          <a
+            href="#skills"
+            class="rounded-full px-4 py-1.5 font-mono text-sm text-muted transition-all hover:bg-elevated hover:text-text"
+          >
+            Skills
+          </a>
+          <a
+            href="#labs"
+            class="rounded-full px-4 py-1.5 font-mono text-sm text-muted transition-all hover:bg-elevated hover:text-text"
+          >
+            Labs
+          </a>
+        </div>
+      </nav>
+
+      <div class="flex items-center gap-6">
+        <a
+          href="https://www.linkedin.com/in/dorian-stm/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hidden font-mono text-sm text-muted transition-colors hover:text-text md:inline"
+        >
+          LinkedIn ↗
+        </a>
+        <a
+          href="/CV_2026-08_Dorian_SAMTMANN.pdf"
+          download
+          class="font-mono text-sm text-muted transition-colors hover:text-text"
+        >
+          CV ↗
+        </a>
+      </div>
+    </header>
+
+    <div class="dot-grid"></div>
+
+    <main class="mx-auto flex max-w-4xl flex-col gap-24 px-6 pb-20 pt-32 md:px-8 md:pb-28 md:pt-36">
+      <!-- Section 1 — Hero -->
+      <section class="flex flex-col gap-6">
+        <p class="font-mono text-sm text-muted">~/portfolio $</p>
+        <h1 class="font-display text-4xl font-semibold tracking-tight md:text-6xl">
+          <span class="typed">Dorian Samtmann_</span>
+        </h1>
+        <p class="font-mono text-lg text-blue md:text-xl">SOC Analyst · Blue Team · IBM QRadar</p>
+        <p class="max-w-2xl text-base leading-relaxed text-muted md:text-lg">
+          3 ans d'expérience en détection et réponse à incidents sur SI critique · +2 300 tickets traités
+        </p>
+
+        <div class="mt-2 flex flex-wrap items-center gap-3">
+          <span
+            class="inline-flex items-center gap-2 rounded-md border border-border bg-surface px-4 py-2 font-mono text-sm text-green shadow-sm"
+          >
+            <span class="relative inline-flex h-2.5 w-2.5">
+              <span class="status-ping absolute inline-flex h-full w-full rounded-full bg-green"></span>
+              <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-green"></span>
+            </span>
+            Disponible — Poste SOC N1/N2
+          </span>
+
+          <a
+            href="/CV_2026-08_Dorian_SAMTMANN.pdf"
+            download
+            class="inline-flex items-center gap-2 rounded-md bg-blue px-4 py-2 font-mono text-sm font-medium text-bg shadow-sm transition-colors hover:bg-blue/90"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M12 3v12" />
+              <path d="m7 10 5 5 5-5" />
+              <path d="M5 21h14" />
+            </svg>
+            Télécharger mon CV
+          </a>
+        </div>
+
+        <nav class="mt-4 flex flex-wrap gap-3" aria-label="Contact">
+          {
+            contacts.map((c) => (
+              <a
+                href={c.href}
+                target={c.href.startsWith('http') ? '_blank' : undefined}
+                rel={c.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                class="inline-flex items-center gap-2 rounded-md border border-border bg-surface px-4 py-2 font-mono text-sm text-text shadow-sm transition-colors hover:border-blue hover:text-blue"
+              >
+                {c.icon === 'mail' && (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                    <path d="m22 6-10 7L2 6" />
+                  </svg>
+                )}
+                {c.icon === 'linkedin' && (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7.5 0h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05C19.9 8 21 10.2 21 13.6V23h-4v-8.4c0-2-.04-4.6-2.8-4.6-2.8 0-3.2 2.2-3.2 4.45V23h-4V8z" />
+                  </svg>
+                )}
+                {c.icon === 'github' && (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.05 11.05 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.24 2.76.12 3.05.74.8 1.18 1.83 1.18 3.09 0 4.43-2.7 5.41-5.27 5.69.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .31.21.67.8.56A10.51 10.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z" />
+                  </svg>
+                )}
+                {c.icon === 'link' && (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07l-1.5 1.5" />
+                    <path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07l1.5-1.5" />
+                  </svg>
+                )}
+                {c.label}
+              </a>
+            ))
+          }
+        </nav>
+      </section>
+
+      <!-- Section 2 — Expérience -->
+      <section id="experience" class="flex flex-col gap-8">
+        <h2 class="font-display text-2xl font-semibold md:text-3xl">Expérience</h2>
+
+        <div class="flex flex-col gap-6">
+          {
+            experience.map((job) => (
+              <TerminalWindow path={job.path}>
+                <div>
+                  <span class="text-green">$</span> <span class="text-blue">whoami</span>
+                </div>
+                <div class="pl-4 text-text">
+                  {job.title} — {job.org}
+                </div>
+
+                <div class="mt-2">
+                  <span class="text-green">$</span> <span class="text-blue">uptime</span>
+                </div>
+                <div class="pl-4 text-text">{job.period}</div>
+
+                <div class="mt-2">
+                  <span class="text-green">$</span> <span class="text-blue">cat missions.log</span>
+                </div>
+                <div class="flex flex-col gap-1 pl-4">
+                  {job.bullets.map((b) => (
+                    <div class="text-text">
+                      <span class="text-muted">→</span> {b}
+                    </div>
+                  ))}
+                </div>
+
+                <div class="mt-2">
+                  <span class="text-green">$</span> <span class="text-blue">tools --list</span>
+                </div>
+                <div class="pl-4 text-purple">{job.stack.join(' · ')}</div>
+              </TerminalWindow>
+            ))
+          }
+        </div>
+      </section>
+
+      <!-- Section 3 — Compétences & Formation -->
+      <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+        <section id="skills" class="flex flex-col gap-6">
+          <h2 class="font-display text-2xl font-semibold md:text-3xl">Compétences</h2>
+
+          <TerminalWindow path="~/skills --category=all">
+            {
+              skillGroups.map((group, i) => (
+                <div class={i > 0 ? 'mt-2' : ''}>
+                  <div>
+                    <span class="text-green">$</span> <span class="text-blue">skills --category={group.slug}</span>
+                  </div>
+                  <div class="pl-4" style={`color: ${group.color};`}>
+                    {group.items.join(' · ')}
+                  </div>
+                </div>
+              ))
+            }
+          </TerminalWindow>
+        </section>
+
+        <!-- Section 4 — Formation -->
+        <section class="flex flex-col gap-6">
+          <h2 class="font-display text-2xl font-semibold md:text-3xl">Formation</h2>
+
+          <TerminalWindow path="~/education">
+            <div>
+              <span class="text-green">$</span> <span class="text-blue">cat education.log</span>
+            </div>
+            <div class="flex flex-col gap-2 pl-4">
+              {
+                formation.map((f) => (
+                  <div class="text-text">
+                    <span class="text-muted">{f.period}</span> — {f.degree}
+                    {f.school && <span class="text-muted"> · {f.school}</span>}
+                  </div>
+                ))
+              }
+            </div>
+          </TerminalWindow>
+        </section>
+      </div>
+
+      <!-- Section 5 — Labs & Certifications -->
+      <section id="labs" class="flex flex-col gap-8">
+        <h2 class="font-display text-2xl font-semibold md:text-3xl">Labs & Certifications</h2>
+
+        <TerminalWindow path="~/labs --status=active">
+          <div>
+            <span class="text-green">$</span> <span class="text-blue">cert --status</span>
+          </div>
+          <div class="flex flex-col gap-2 pl-4">
+            {
+              labs.map((lab) => (
+                <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                  <span class="text-muted">[</span>
+                  <span style={`color: ${lab.color};`}>{lab.bar}</span>
+                  <span class="text-muted">]</span>
+                  <span class="text-text">{lab.title}</span>
+                  <span class="text-border">{lab.dots}</span>
+                  <span class="font-medium" style={`color: ${lab.color};`}>
+                    {lab.status}
+                  </span>
+                </div>
+              ))
+            }
+          </div>
+          {
+            labs.some((l) => l.subtitle) && (
+              <div class="mt-3 flex flex-col gap-1 border-t border-border pt-3">
+                {labs
+                  .filter((l) => l.subtitle)
+                  .map((l) => (
+                    <div class="text-xs text-muted">
+                      # {l.title}: {l.subtitle}
+                    </div>
+                  ))}
+              </div>
+            )
+          }
+        </TerminalWindow>
+      </section>
+    </main>
+
+    <!-- Section 6 — Footer -->
+    <footer class="border-t border-border">
+      <div class="mx-auto flex max-w-4xl flex-col gap-2 px-6 py-10 font-mono text-sm text-muted md:px-8">
+        <p>Dorian Samtmann · dorian.s-t-m.fr · 2026</p>
+        <p>
+          <a href="https://cybersmartdesign.s-t-m.fr" class="text-muted transition-colors hover:text-blue">
+            cybersmartdesign.s-t-m.fr
+          </a>
+          — Agence web & développement
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

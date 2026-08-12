@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #0d1117;
+    color: #f0f6fc;
+  }
+}
+
+/* Subtle decorative dot grid — the one graphic element allowed */
+.dot-grid {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(48, 54, 61, 0.3) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Terminal typing effect — CSS only, no JS */
+.typed {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: bottom;
+  border-right: 3px solid #7ee787;
+  width: 16ch;
+  animation:
+    typing 1.6s steps(16, end) 0.2s 1 both,
+    caret-blink 0.85s step-end infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 16ch;
+  }
+}
+
+@keyframes caret-blink {
+  0%,
+  100% {
+    border-color: #7ee787;
+  }
+  50% {
+    border-color: transparent;
+  }
+}
+
+/* Availability badge status dot — small radar ping confined to the dot itself */
+.status-ping {
+  animation: status-ping 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes status-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  75%,
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* Progress bars for labs & certifications */
+.progress-track {
+  width: 100%;
+  height: 8px;
+  border-radius: 8px;
+  background-color: #21262d;
+  border: 1px solid #30363d;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 8px;
+}
