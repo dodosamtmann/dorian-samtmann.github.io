@@ -20,4 +20,4 @@ npm run preview  # prévisualiser le build
 
 ## Déploiement
 
-Déployé automatiquement sur GitHub Pages via `.github/workflows/deploy.yml` à chaque push sur `main`. Domaine personnalisé : [dorian.s-t-m.fr](https://dorian.s-t-m.fr) (voir `public/CNAME`).
+Déployé automatiquement sur Cloudflare Pages (intégration Git) à chaque push sur `main`. Domaine personnalisé : [portfolio-dorian.s-t-m.fr](https://portfolio-dorian.s-t-m.fr).
