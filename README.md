@@ -6,7 +6,7 @@ Portfolio SOC Analyst / Blue Team de Dorian Samtmann — site statique, une seul
 
 - [Astro](https://astro.build) (static output, TypeScript strict)
 - [Tailwind CSS](https://tailwindcss.com)
-- Zéro JavaScript côté client — animations en CSS pur
+- JavaScript minimal (inline, ~1 Ko) : révélations au scroll, compteurs, progression de lecture — la page reste lisible sans JS et respecte `prefers-reduced-motion`
 
 ## Développement
 

@@ -1,34 +1,54 @@
 ---
 import '../styles/global.css';
-import TerminalWindow from '../components/TerminalWindow.astro';
+
+const CV = '/CV_2026-08_Dorian_SAMTMANN.pdf';
 
 const contacts = [
-  { label: 'dorian.samtmann@gmail.com', href: 'mailto:dorian.samtmann@gmail.com', icon: 'mail' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/dorian-stm/', icon: 'linkedin' },
-  { label: 'GitHub', href: 'https://github.com/dodosamtmann', icon: 'github' },
-  { label: 'cybersmartdesign.fr', href: 'https://cybersmartdesign.fr', icon: 'link' },
+  { label: 'Email', value: 'dorian.samtmann@gmail.com', href: 'mailto:dorian.samtmann@gmail.com' },
+  { label: 'LinkedIn', value: 'in/dorian-stm', href: 'https://www.linkedin.com/in/dorian-stm/' },
+  { label: 'GitHub', value: 'dodosamtmann', href: 'https://github.com/dodosamtmann' },
+  { label: 'Web', value: 'cybersmartdesign.fr', href: 'https://cybersmartdesign.fr' },
+];
+
+// `count` drives the count-up animation; `value` is what renders without JS.
+const indicators = [
+  { count: 2300, suffix: '+', value: '2 300+', label: 'tickets traités sur SI critique' },
+  { count: 3, suffix: ' ans', value: '3 ans', label: 'en détection & réponse à incidents' },
+  { count: 6, suffix: ' mois', value: '6 mois', label: 'pour livrer une préprod SIEM complète' },
+  { count: 3, suffix: '', value: '3', label: 'analystes SOC juniors formés' },
 ];
 
 const experience = [
   {
-    path: '~/experience/pro-btp',
-    period: '2022 – 2025',
+    period: 'Avr. → Juil. 2022',
+    status: 'Clos',
+    title: 'Stage de fin de DUT',
+    org: 'IBM',
+    place: 'Lille',
+    bullets: ['Stage de 3 mois clôturant le DUT Réseaux & Télécommunications'],
+    stack: [] as string[],
+  },
+  {
+    period: '2022 → 2025',
+    status: 'Clos',
     title: 'Analyste Cybersécurité',
-    org: 'Pro BTP · Cagnes-sur-Mer',
+    org: 'Pro BTP',
+    place: 'Cagnes-sur-Mer',
     bullets: [
       '+2 300 tickets traités sur SI critique (secteur assurance/BTP)',
       'Use cases de détection déployés en production sur IBM QRadar',
       'Préprod SIEM complète déployée en 6 mois',
       'Formation de 3 analystes SOC juniors',
-      "Réponse à incidents selon ISO 27035",
+      'Réponse à incidents selon ISO 27035',
     ],
     stack: ['QRadar', 'SentinelOne', 'Netskope', 'Cisco IronPort', 'ServiceNow', 'Resilient', 'Rapid7'],
   },
   {
-    path: '~/experience/cybersmartdesign',
-    period: 'Nov. 2025 – présent',
+    period: 'Nov. 2025 → …',
+    status: 'Ouvert',
     title: 'Freelance Web',
-    org: 'CyberSmartDesign · Vence',
+    org: 'CyberSmartDesign',
+    place: 'Vence',
     bullets: [
       'Création de sites web pour TPE/PME',
       'Stack : Astro · Cloudflare Workers · TypeScript',
@@ -36,44 +56,43 @@ const experience = [
     ],
     stack: ['Astro', 'Cloudflare Workers', 'TypeScript'],
   },
-];
+].map((job, i) => ({ ...job, ref: `CAS-${String(i + 1).padStart(2, '0')}` }));
 
 const skillGroups = [
-  { name: 'SIEM & Détection', slug: 'siem', color: '#58a6ff', items: ['QRadar', 'Wazuh', 'MITRE ATT&CK', 'ISO 27035'] },
-  { name: 'Protection', slug: 'protection', color: '#bc8cff', items: ['SentinelOne', 'Netskope', 'Defender', 'IronPort'] },
-  { name: 'SOAR & Ticketing', slug: 'soar', color: '#7ee787', items: ['ServiceNow', 'IBM Resilient'] },
-  { name: 'Vuln Management', slug: 'vuln', color: '#f0a500', items: ['Rapid7'] },
-  { name: 'Scripting', slug: 'scripting', color: '#58a6ff', items: ['Python', 'PowerShell', 'Bash'] },
-  { name: 'Infrastructure', slug: 'infra', color: '#8b949e', items: ['Docker', 'Cloudflare', 'Microsoft 365'] },
+  { name: 'SIEM & Détection', items: ['QRadar', 'Wazuh', 'MITRE ATT&CK', 'ISO 27035'] },
+  { name: 'Protection', items: ['SentinelOne', 'Netskope', 'Defender', 'IronPort'] },
+  { name: 'SOAR & Ticketing', items: ['ServiceNow', 'IBM Resilient'] },
+  { name: 'Vuln Mgmt', items: ['Rapid7'] },
+  { name: 'Scripting', items: ['Python', 'PowerShell', 'Bash'] },
+  { name: 'Infra', items: ['Docker', 'Cloudflare', 'Microsoft 365'] },
 ];
 
 const formation = [
-  { period: '2023 – 2025', degree: 'Master — Manager Infrastructures & Cybersécurité des SI', school: 'CESI' },
-  { period: '2022 – 2023', degree: 'Licence — Administrateur Système et Réseau', school: 'CESI' },
-  { period: '2020 – 2022', degree: 'DUT — Réseaux et Télécommunications', school: '' },
+  { period: '2023 – 2025', degree: 'Master — Manager Infrastructures & Cybersécurité des SI', school: 'CESI · Nice' },
+  { period: '2022 – 2023', degree: 'Licence — Administrateur Système et Réseau', school: 'CESI · Nice' },
+  { period: '2020 – 2022', degree: 'DUT — Réseaux et Télécommunications', school: 'Université Côte d’Azur · Sophia Antipolis' },
 ];
 
-function progressBar(pct: number): string {
-  const filled = Math.round(pct / 10);
-  return '█'.repeat(filled) + '░'.repeat(10 - filled);
-}
-
 const labs = [
-  { status: 'EN PRÉPARATION', color: '#bc8cff', title: 'BTL1 — Blue Team Level 1', subtitle: '', progress: 80 },
-  {
-    status: 'ACTIF',
-    color: '#7ee787',
-    title: 'Wazuh Home-Lab',
-    subtitle: 'SIEM déployé · scénarios de détection actifs',
-    progress: 100,
-  },
-  { status: 'EN COURS', color: '#58a6ff', title: 'TryHackMe — SOC Level 1', subtitle: '', progress: 70 },
-  { status: 'EN COURS', color: '#58a6ff', title: 'LetsDefend — Scénarios SOC', subtitle: '', progress: 60 },
-].map((lab) => ({
-  ...lab,
-  bar: progressBar(lab.progress),
-  dots: '.'.repeat(Math.max(2, 34 - lab.title.length)),
-}));
+  { status: 'En préparation', title: 'BTL1 — Blue Team Level 1', note: '', progress: 80 },
+  { status: 'Actif', title: 'Wazuh Home-Lab', note: 'SIEM déployé · scénarios de détection actifs', progress: 100 },
+  { status: 'En cours', title: 'TryHackMe — SOC Level 1', note: '', progress: 70 },
+  { status: 'En cours', title: 'LetsDefend — Scénarios SOC', note: '', progress: 60 },
+];
+
+const sections = [
+  { id: 'chronologie', label: 'Chronologie' },
+  { id: 'arsenal', label: 'Arsenal' },
+  { id: 'labs', label: 'Labs' },
+  { id: 'conclusion', label: 'Contact' },
+];
+
+const idCard = [
+  ['Rôle', 'SOC Analyst N1/N2'],
+  ['Spécialité', 'IBM QRadar'],
+  ['Cadre', 'ISO 27035 · ATT&CK'],
+  ['Base', 'Vence · Télétravail ok'],
+];
 ---
 
 <!doctype html>
@@ -82,6 +101,7 @@ const labs = [
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#f1ede2" />
     <title>Dorian Samtmann — SOC Analyst · Blue Team</title>
     <meta
       name="description"
@@ -90,273 +110,396 @@ const labs = [
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap"
       rel="stylesheet"
     />
+    <!-- Enables scroll reveals; drops back to a static page if the main script never runs -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      setTimeout(function () {
+        if (!window.__reveal) document.documentElement.classList.remove('js');
+      }, 2500);
+    </script>
   </head>
-  <body class="font-body bg-bg text-text antialiased">
-    <!-- Fixed top navigation -->
-    <header class="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-6 py-5 backdrop-blur-sm md:px-8">
-      <div>
-        <p class="font-display text-sm font-semibold text-text">Dorian Samtmann</p>
-        <p class="font-mono text-xs text-muted">SOC Analyst</p>
-      </div>
+  <body class="font-body text-ink antialiased">
+    <div class="scanner" aria-hidden="true"></div>
 
-      <nav class="absolute left-1/2 hidden -translate-x-1/2 md:block" aria-label="Navigation principale">
-        <div class="flex items-center gap-1 rounded-full border border-border bg-surface px-2 py-1.5 shadow-sm">
-          <a
-            href="#experience"
-            class="rounded-full px-4 py-1.5 font-mono text-sm text-muted transition-all hover:bg-elevated hover:text-text"
-          >
-            Experience
-          </a>
-          <a
-            href="#skills"
-            class="rounded-full px-4 py-1.5 font-mono text-sm text-muted transition-all hover:bg-elevated hover:text-text"
-          >
-            Skills
-          </a>
-          <a
-            href="#labs"
-            class="rounded-full px-4 py-1.5 font-mono text-sm text-muted transition-all hover:bg-elevated hover:text-text"
-          >
-            Labs
-          </a>
-        </div>
-      </nav>
-
-      <div class="flex items-center gap-6">
-        <a
-          href="https://www.linkedin.com/in/dorian-stm/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="hidden font-mono text-sm text-muted transition-colors hover:text-text md:inline"
-        >
-          LinkedIn ↗
-        </a>
-        <a
-          href="/CV_2026-08_Dorian_SAMTMANN.pdf"
-          download
-          class="font-mono text-sm text-muted transition-colors hover:text-text"
-        >
-          CV ↗
-        </a>
-      </div>
-    </header>
-
-    <div class="dot-grid"></div>
-
-    <main class="mx-auto flex max-w-4xl flex-col gap-24 px-6 pb-20 pt-32 md:px-8 md:pb-28 md:pt-36">
-      <!-- Section 1 — Hero -->
-      <section class="flex flex-col gap-6">
-        <p class="font-mono text-sm text-muted">~/portfolio $</p>
-        <h1 class="font-display text-4xl font-semibold tracking-tight md:text-6xl">
-          <span class="typed">Dorian Samtmann_</span>
-        </h1>
-        <p class="font-mono text-lg text-blue md:text-xl">SOC Analyst · Blue Team · IBM QRadar</p>
-        <p class="max-w-2xl text-base leading-relaxed text-muted md:text-lg">
-          3 ans d'expérience en détection et réponse à incidents sur SI critique · +2 300 tickets traités
-        </p>
-
-        <div class="mt-2 flex flex-wrap items-center gap-3">
-          <span
-            class="inline-flex items-center gap-2 rounded-md border border-border bg-surface px-4 py-2 font-mono text-sm text-green shadow-sm"
-          >
-            <span class="relative inline-flex h-2.5 w-2.5">
-              <span class="status-ping absolute inline-flex h-full w-full rounded-full bg-green"></span>
-              <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-green"></span>
-            </span>
-            Disponible — Poste SOC N1/N2
-          </span>
-
-          <a
-            href="/CV_2026-08_Dorian_SAMTMANN.pdf"
-            download
-            class="inline-flex items-center gap-2 rounded-md bg-blue px-4 py-2 font-mono text-sm font-medium text-bg shadow-sm transition-colors hover:bg-blue/90"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M12 3v12" />
-              <path d="m7 10 5 5 5-5" />
-              <path d="M5 21h14" />
-            </svg>
-            Télécharger mon CV
-          </a>
-        </div>
-
-        <nav class="mt-4 flex flex-wrap gap-3" aria-label="Contact">
+    <!-- Document header strip -->
+    <header class="sticky top-0 z-50 border-b border-ink bg-paper/90 backdrop-blur-sm">
+      <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 font-mono text-[11px] uppercase tracking-[0.14em] md:px-8">
+        <a href="#top" class="font-semibold text-ink">D. Samtmann</a>
+        <nav class="hidden items-center gap-6 md:flex" aria-label="Navigation principale">
           {
-            contacts.map((c) => (
-              <a
-                href={c.href}
-                target={c.href.startsWith('http') ? '_blank' : undefined}
-                rel={c.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                class="inline-flex items-center gap-2 rounded-md border border-border bg-surface px-4 py-2 font-mono text-sm text-text shadow-sm transition-colors hover:border-blue hover:text-blue"
-              >
-                {c.icon === 'mail' && (
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <rect x="2" y="4" width="20" height="16" rx="2" />
-                    <path d="m22 6-10 7L2 6" />
-                  </svg>
-                )}
-                {c.icon === 'linkedin' && (
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7.5 0h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05C19.9 8 21 10.2 21 13.6V23h-4v-8.4c0-2-.04-4.6-2.8-4.6-2.8 0-3.2 2.2-3.2 4.45V23h-4V8z" />
-                  </svg>
-                )}
-                {c.icon === 'github' && (
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.05 11.05 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.24 2.76.12 3.05.74.8 1.18 1.83 1.18 3.09 0 4.43-2.7 5.41-5.27 5.69.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .31.21.67.8.56A10.51 10.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z" />
-                  </svg>
-                )}
-                {c.icon === 'link' && (
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07l-1.5 1.5" />
-                    <path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07l1.5-1.5" />
-                  </svg>
-                )}
-                {c.label}
+            sections.map((s, i) => (
+              <a href={`#${s.id}`} data-nav={s.id} class="nav-link text-muted transition-colors hover:text-ink">
+                <span class="text-stamp">§{String(i + 1).padStart(2, '0')}</span> {s.label}
               </a>
             ))
           }
         </nav>
-      </section>
+        <a href={CV} download class="border border-ink px-3 py-1.5 font-semibold transition-colors hover:bg-ink hover:text-paper">
+          CV.pdf ↓
+        </a>
+      </div>
+      <div class="read-progress" aria-hidden="true"></div>
+    </header>
 
-      <!-- Section 2 — Expérience -->
-      <section id="experience" class="flex flex-col gap-8">
-        <h2 class="font-display text-2xl font-semibold md:text-3xl">Expérience</h2>
-
-        <div class="flex flex-col gap-6">
-          {
-            experience.map((job) => (
-              <TerminalWindow path={job.path}>
-                <div>
-                  <span class="text-green">$</span> <span class="text-blue">whoami</span>
-                </div>
-                <div class="pl-4 text-text">
-                  {job.title} — {job.org}
-                </div>
-
-                <div class="mt-2">
-                  <span class="text-green">$</span> <span class="text-blue">uptime</span>
-                </div>
-                <div class="pl-4 text-text">{job.period}</div>
-
-                <div class="mt-2">
-                  <span class="text-green">$</span> <span class="text-blue">cat missions.log</span>
-                </div>
-                <div class="flex flex-col gap-1 pl-4">
-                  {job.bullets.map((b) => (
-                    <div class="text-text">
-                      <span class="text-muted">→</span> {b}
-                    </div>
-                  ))}
-                </div>
-
-                <div class="mt-2">
-                  <span class="text-green">$</span> <span class="text-blue">tools --list</span>
-                </div>
-                <div class="pl-4 text-purple">{job.stack.join(' · ')}</div>
-              </TerminalWindow>
-            ))
-          }
+    <main id="top" class="mx-auto max-w-6xl px-4 md:px-8">
+      <!-- ───────── Cover ───────── -->
+      <section class="relative pb-16 pt-10 md:pb-24 md:pt-14">
+        <div class="flex flex-wrap items-baseline justify-between gap-2 border-b border-rule pb-3 font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
+          <span class="print-in">Rapport d'analyse · Réf. DS-2026-001</span>
+          <span class="print-in" style="animation-delay:.1s">TLP:CLEAR · Diffusion libre</span>
         </div>
-      </section>
 
-      <!-- Section 3 — Compétences & Formation -->
-      <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
-        <section id="skills" class="flex flex-col gap-6">
-          <h2 class="font-display text-2xl font-semibold md:text-3xl">Compétences</h2>
+        <div class="mt-10 grid gap-10 md:mt-14 md:grid-cols-12">
+          <div class="md:col-span-8">
+            <p class="print-in font-mono text-xs uppercase tracking-[0.2em] text-stamp" style="animation-delay:.2s">
+              Objet de l'analyse
+            </p>
+            <h1 class="mt-3 font-display text-[clamp(3.4rem,11vw,8.5rem)] leading-[0.88] tracking-[-0.02em]">
+              <span class="print-in block" style="animation-delay:.3s">Dorian</span>
+              <em class="print-in block italic" style="animation-delay:.55s">Samtmann</em>
+            </h1>
+            <p class="print-in mt-8 max-w-xl text-lg leading-relaxed md:text-xl" style="animation-delay:.8s">
+              Analyste SOC, Blue Team. Trois ans à lire des alertes QRadar sur un SI critique pour séparer le bruit
+              de ce qui <span class="redact" tabindex="0" title="Survoler pour lire">ne devrait vraiment pas être là</span>.
+            </p>
+          </div>
 
-          <TerminalWindow path="~/skills --category=all">
-            {
-              skillGroups.map((group, i) => (
-                <div class={i > 0 ? 'mt-2' : ''}>
-                  <div>
-                    <span class="text-green">$</span> <span class="text-blue">skills --category={group.slug}</span>
-                  </div>
-                  <div class="pl-4" style={`color: ${group.color};`}>
-                    {group.items.join(' · ')}
-                  </div>
-                </div>
-              ))
-            }
-          </TerminalWindow>
-        </section>
-
-        <!-- Section 4 — Formation -->
-        <section class="flex flex-col gap-6">
-          <h2 class="font-display text-2xl font-semibold md:text-3xl">Formation</h2>
-
-          <TerminalWindow path="~/education">
-            <div>
-              <span class="text-green">$</span> <span class="text-blue">cat education.log</span>
-            </div>
-            <div class="flex flex-col gap-2 pl-4">
+          <!-- Identification card -->
+          <aside class="thud relative md:col-span-4 md:pt-8">
+            <dl class="print-in border border-ink bg-sheet font-mono text-[13px]" style="animation-delay:.9s">
               {
-                formation.map((f) => (
-                  <div class="text-text">
-                    <span class="text-muted">{f.period}</span> — {f.degree}
-                    {f.school && <span class="text-muted"> · {f.school}</span>}
+                idCard.map(([k, v]) => (
+                  <div class="flex gap-3 border-b border-rule px-4 py-2.5 last:border-b-0">
+                    <dt class="w-24 shrink-0 uppercase tracking-wider text-muted">{k}</dt>
+                    <dd>{v}</dd>
                   </div>
                 ))
               }
+            </dl>
+            <div class="pointer-events-none absolute -bottom-12 right-2 md:-bottom-14 md:-right-4">
+              <span class="stamp text-lg md:text-xl">Disponible</span>
             </div>
-          </TerminalWindow>
-        </section>
-      </div>
+          </aside>
+        </div>
 
-      <!-- Section 5 — Labs & Certifications -->
-      <section id="labs" class="flex flex-col gap-8">
-        <h2 class="font-display text-2xl font-semibold md:text-3xl">Labs & Certifications</h2>
-
-        <TerminalWindow path="~/labs --status=active">
-          <div>
-            <span class="text-green">$</span> <span class="text-blue">cert --status</span>
-          </div>
-          <div class="flex flex-col gap-2 pl-4">
+        <!-- Key indicators -->
+        <div class="rv relative mt-20 md:mt-24" data-counters>
+          <p class="st absolute -top-9 left-0 -rotate-2 font-hand text-2xl text-stamp md:-left-2" style="--d:700ms">à retenir ↓</p>
+          <div class="draw h-px bg-ink"></div>
+          <div class="grid grid-cols-2 md:grid-cols-4">
             {
-              labs.map((lab) => (
-                <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-                  <span class="text-muted">[</span>
-                  <span style={`color: ${lab.color};`}>{lab.bar}</span>
-                  <span class="text-muted">]</span>
-                  <span class="text-text">{lab.title}</span>
-                  <span class="text-border">{lab.dots}</span>
-                  <span class="font-medium" style={`color: ${lab.color};`}>
-                    {lab.status}
-                  </span>
+              indicators.map((k, i) => (
+                <div
+                  class={`st px-1 py-6 md:px-5 ${i % 2 === 1 ? 'border-l border-rule pl-4' : ''} ${i >= 2 ? 'border-t border-rule md:border-t-0' : ''} ${i === 2 ? 'md:border-l md:pl-5' : ''}`}
+                  style={`--d:${i * 120}ms`}
+                >
+                  <p class="font-display text-5xl leading-none md:text-6xl">
+                    <span class={i === 0 ? 'marker' : ''} data-count={k.count} data-suffix={k.suffix}>
+                      {k.value}
+                    </span>
+                  </p>
+                  <p class="mt-3 max-w-[16ch] text-sm leading-snug text-muted">{k.label}</p>
                 </div>
               ))
             }
           </div>
+        </div>
+      </section>
+
+      <!-- ───────── §01 Chronologie ───────── -->
+      <section id="chronologie" class="scroll-mt-20 border-t border-ink py-16 md:grid md:grid-cols-12 md:gap-10 md:py-24">
+        <div class="rv md:col-span-3">
+          <p class="font-mono text-xs uppercase tracking-[0.2em] text-stamp">§ 01</p>
+          <h2 class="mt-2 font-display text-5xl leading-none md:text-6xl">Chronologie</h2>
+          <p class="mt-4 max-w-xs text-sm text-muted">Les faits, dans l'ordre. Chaque poste est traité comme un cas.</p>
+        </div>
+
+        <ol class="mt-10 md:col-span-9 md:mt-0">
           {
-            labs.some((l) => l.subtitle) && (
-              <div class="mt-3 flex flex-col gap-1 border-t border-border pt-3">
-                {labs
-                  .filter((l) => l.subtitle)
-                  .map((l) => (
-                    <div class="text-xs text-muted">
-                      # {l.title}: {l.subtitle}
-                    </div>
-                  ))}
-              </div>
-            )
+            experience.map((job, n) => (
+              <li class="rv case relative grid gap-4 py-10 first:pt-0 md:grid-cols-9 md:gap-8">
+                {n > 0 && <div class="draw absolute inset-x-0 top-0 h-px bg-rule" />}
+                <div class="font-mono text-xs uppercase tracking-wider md:col-span-2">
+                  <p class="case-ref text-muted transition-colors">{job.ref}</p>
+                  <p class="mt-1 text-sm normal-case tracking-normal text-ink">{job.period}</p>
+                  <p class="mt-3 inline-flex items-center gap-2">
+                    <span
+                      class={`inline-block h-2 w-2 rounded-full ${job.status === 'Ouvert' ? 'pulse bg-stamp' : 'border border-ink'}`}
+                    />
+                    Statut : {job.status}
+                  </p>
+                </div>
+
+                <div class="md:col-span-7">
+                  <h3 class="font-display text-3xl leading-tight md:text-4xl">
+                    {job.title} <span class="italic text-muted">chez</span> {job.org}
+                  </h3>
+                  <p class="mt-1 font-mono text-xs uppercase tracking-wider text-muted">{job.place}</p>
+
+                  <p class="mt-6 font-mono text-[11px] uppercase tracking-[0.18em] text-muted">Constatations</p>
+                  <ol class="mt-2 space-y-2">
+                    {job.bullets.map((b, i) => (
+                      <li class="flex gap-4 border-b border-dotted border-rule pb-2 leading-relaxed">
+                        <span class="st w-6 shrink-0 pt-0.5 font-mono text-xs text-muted" style={`--d:${250 + i * 110}ms`}>
+                          {String(i + 1).padStart(2, '0')}
+                        </span>
+                        <span class="line" style={`--d:${300 + i * 110}ms`}>
+                          {b}
+                        </span>
+                      </li>
+                    ))}
+                  </ol>
+
+                  {job.stack.length > 0 && (
+                    <>
+                      <p class="mt-6 font-mono text-[11px] uppercase tracking-[0.18em] text-muted">Outils</p>
+                      <ul class="mt-3 flex flex-wrap gap-2">
+                        {job.stack.map((t, i) => (
+                          <li
+                            class="st border border-ink bg-sheet px-2.5 py-1 font-mono text-xs"
+                            style={`--d:${450 + job.bullets.length * 110 + i * 50}ms`}
+                          >
+                            {t}
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                </div>
+              </li>
+            ))
           }
-        </TerminalWindow>
+        </ol>
+      </section>
+
+      <!-- ───────── §02 Arsenal ───────── -->
+      <section id="arsenal" class="scroll-mt-20 border-t border-ink py-16 md:py-24">
+        <div class="rv flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <p class="font-mono text-xs uppercase tracking-[0.2em] text-stamp">§ 02</p>
+            <h2 class="mt-2 font-display text-5xl leading-none md:text-6xl">Arsenal</h2>
+          </div>
+          <p class="max-w-sm text-sm text-muted">Disposé comme une matrice ATT&CK — sauf qu'ici, chaque colonne sert à défendre.</p>
+        </div>
+
+        <div class="rv mt-10 grid grid-cols-2 border-l border-t border-ink sm:grid-cols-3 lg:grid-cols-6">
+          {
+            skillGroups.map((g, c) => (
+              <div class="border-b border-r border-ink">
+                <p
+                  class="st bg-ink px-3 py-2.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-paper"
+                  style={`--d:${c * 70}ms`}
+                >
+                  {g.name}
+                </p>
+                <ul>
+                  {g.items.map((item, r) => (
+                    <li
+                      class="st border-t border-rule px-3 py-2.5 text-sm transition-colors first:border-t-0 hover:bg-marker/60"
+                      style={`--d:${c * 70 + (r + 1) * 90}ms`}
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+
+        <!-- Formation -->
+        <div class="rv mt-16 md:grid md:grid-cols-12 md:gap-10">
+          <h3 class="font-display text-3xl md:col-span-3">Formation</h3>
+          <ul class="mt-6 md:col-span-9 md:mt-0">
+            {
+              formation.map((f, i) => (
+                <li
+                  class="st flex flex-col gap-1 border-b border-rule py-4 first:pt-0 sm:flex-row sm:items-baseline sm:gap-6"
+                  style={`--d:${i * 120}ms`}
+                >
+                  <span class="w-28 shrink-0 font-mono text-xs text-muted">{f.period}</span>
+                  <span class="flex-1">{f.degree}</span>
+                  <span class="font-mono text-xs uppercase tracking-wider text-muted sm:text-right">{f.school}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </section>
+
+      <!-- ───────── §03 Labs ───────── -->
+      <section id="labs" class="scroll-mt-20 border-t border-ink py-16 md:grid md:grid-cols-12 md:gap-10 md:py-24">
+        <div class="rv md:col-span-3">
+          <p class="font-mono text-xs uppercase tracking-[0.2em] text-stamp">§ 03</p>
+          <h2 class="mt-2 font-display text-5xl leading-none md:text-6xl">
+            Labs<br /><em class="italic">en cours</em>
+          </h2>
+          <p class="mt-4 max-w-xs text-sm text-muted">Certifications &amp; home-lab — les dossiers encore ouverts.</p>
+        </div>
+
+        <ul class="rv mt-10 space-y-8 md:col-span-9 md:mt-2">
+          {
+            labs.map((lab, i) => (
+              <li class="st" style={`--d:${i * 140}ms`}>
+                <div class="flex items-baseline gap-3">
+                  <span class="text-lg">{lab.title}</span>
+                  <span class="leader" aria-hidden="true" />
+                  <span class={`font-mono text-xs uppercase tracking-wider ${lab.progress === 100 ? 'text-stamp' : 'text-muted'}`}>
+                    {lab.status} · {lab.progress}%
+                  </span>
+                </div>
+                <div
+                  class="hatch-track mt-2"
+                  role="progressbar"
+                  aria-valuenow={lab.progress}
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  aria-label={lab.title}
+                >
+                  <div class={`hatch-fill ${lab.progress === 100 ? 'is-done' : ''}`} style={`--p:${lab.progress}%`} />
+                </div>
+                {lab.note && <p class="mt-2 font-hand text-xl text-stamp">↳ {lab.note}</p>}
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- ───────── §04 Conclusion ───────── -->
+      <section id="conclusion" class="rv scroll-mt-20 border-t border-ink py-16 md:py-24">
+        <p class="font-mono text-xs uppercase tracking-[0.2em] text-stamp">§ 04 — Conclusion de l'analyste</p>
+        <p class="mt-6 max-w-4xl font-display text-[clamp(2.4rem,6vw,4.75rem)] leading-[1.02]">
+          Profil <span class="marker">opérationnel</span>, disponible pour un poste SOC <em class="italic">N1/N2</em>.
+        </p>
+        <p class="mt-6 max-w-xl text-lg text-muted">Le reste se raconte mieux de vive voix.</p>
+
+        <div class="mt-12 grid gap-10 md:grid-cols-12">
+          <ul class="font-mono text-sm md:col-span-7">
+            {
+              contacts.map((c, i) => (
+                <li class="st" style={`--d:${300 + i * 90}ms`}>
+                  <a
+                    href={c.href}
+                    target={c.href.startsWith('http') ? '_blank' : undefined}
+                    rel={c.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    class="group flex items-baseline gap-3 border-b border-rule py-3 transition-colors hover:border-ink"
+                  >
+                    <span class="w-20 shrink-0 text-xs uppercase tracking-wider text-muted">{c.label}</span>
+                    <span class="break-all group-hover:underline group-hover:decoration-stamp group-hover:decoration-2 group-hover:underline-offset-4">
+                      {c.value}
+                    </span>
+                    <span class="ml-auto text-muted transition-transform group-hover:translate-x-1 group-hover:text-stamp">→</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+
+          <div class="flex flex-col justify-between gap-8 md:col-span-5 md:pl-6">
+            <a
+              href={CV}
+              download
+              class="group flex items-center justify-between border-2 border-ink bg-ink px-5 py-4 font-mono text-sm uppercase tracking-wider text-paper transition-colors hover:bg-transparent hover:text-ink"
+            >
+              Télécharger le dossier complet
+              <span class="transition-transform group-hover:translate-y-0.5">↓</span>
+            </a>
+            <div>
+              <p class="sig font-hand text-4xl leading-none">Dorian S.</p>
+              <p class="mt-2 border-t border-ink pt-2 font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
+                Signature de l'analyste · Vence, 2026
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
 
-    <!-- Section 6 — Footer -->
-    <footer class="border-t border-border">
-      <div class="mx-auto flex max-w-4xl flex-col gap-2 px-6 py-10 font-mono text-sm text-muted md:px-8">
-        <p>Dorian Samtmann · portfolio-dorian.s-t-m.fr · 2026</p>
-        <p>
-          <a href="https://cybersmartdesign.fr" class="text-muted transition-colors hover:text-blue">
-            cybersmartdesign.fr
-          </a>
-          — Agence web & développement
-        </p>
+    <footer class="border-t border-ink">
+      <div class="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 font-mono text-[11px] uppercase tracking-[0.14em] text-muted sm:flex-row sm:justify-between md:px-8">
+        <span>Fin du rapport · portfolio-dorian.s-t-m.fr</span>
+        <a href="https://cybersmartdesign.fr" class="transition-colors hover:text-ink">Mise en page : cybersmartdesign.fr</a>
       </div>
     </footer>
+
+    <script is:inline>
+      (function () {
+        window.__reveal = true;
+        var root = document.documentElement;
+        var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var blocks = document.querySelectorAll('.rv');
+
+        function countUp(el) {
+          var target = +el.dataset.count;
+          var suffix = el.dataset.suffix || '';
+          if (still || target < 10) return;
+          var start = performance.now();
+          var dur = 1400;
+          (function tick(now) {
+            var t = Math.min(1, (now - start) / dur);
+            var v = Math.round(target * (1 - Math.pow(1 - t, 4)));
+            el.textContent = String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + suffix;
+            if (t < 1) requestAnimationFrame(tick);
+          })(start);
+        }
+
+        function reveal(el) {
+          el.classList.add('is-in');
+          if (el.hasAttribute('data-counters')) el.querySelectorAll('[data-count]').forEach(countUp);
+        }
+
+        if (still || !('IntersectionObserver' in window)) {
+          blocks.forEach(reveal);
+        } else {
+          var io = new IntersectionObserver(
+            function (entries) {
+              entries.forEach(function (e) {
+                if (e.isIntersecting) {
+                  reveal(e.target);
+                  io.unobserve(e.target);
+                }
+              });
+            },
+            { rootMargin: '0px 0px -12% 0px' }
+          );
+          blocks.forEach(function (b) {
+            io.observe(b);
+          });
+        }
+
+        // Reading progress + active section in the nav
+        var navLinks = document.querySelectorAll('[data-nav]');
+        var sections = Array.prototype.map.call(navLinks, function (a) {
+          return document.getElementById(a.dataset.nav);
+        });
+        var queued = false;
+        function onScroll() {
+          queued = false;
+          var max = root.scrollHeight - innerHeight;
+          root.style.setProperty('--read', max > 0 ? (scrollY / max).toFixed(4) : '0');
+          var current = -1;
+          sections.forEach(function (s, i) {
+            if (s && s.getBoundingClientRect().top < innerHeight * 0.4) current = i;
+          });
+          navLinks.forEach(function (a, i) {
+            a.setAttribute('aria-current', i === current ? 'true' : 'false');
+          });
+        }
+        addEventListener(
+          'scroll',
+          function () {
+            if (!queued) {
+              queued = true;
+              requestAnimationFrame(onScroll);
+            }
+          },
+          { passive: true }
+        );
+        onScroll();
+      })();
+    </script>
   </body>
 </html>
